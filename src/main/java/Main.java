@@ -1,27 +1,33 @@
 class TestThread1 extends Thread {
     public void run() {
-        try {
-            Thread.sleep(5000);
-            for (int i = 1; i <= 5; i++){
-                System.out.println(Thread.currentThread().getName() + ":" + i);
+
+        while (true){
+            try {
+                Thread.sleep(500);
+                System.out.println("Test1");
+            } catch (InterruptedException e) {
+                break;
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
+        System.out.println("I am interrupted - Test1");
 
     }
 }
-//class TestThread2 extends Thread {
-//    public void run() {
-//        System.out.println("Test2");
-//    }
-//}
+class TestThread2 extends Thread {
+    public void run() {
+        while (!Thread.currentThread().isInterrupted()) {
+            System.out.println("Test2");
+        }
+        System.out.println("I am interrupted - Test2");
+    }
+}
 
-public class Main  {    
+public class Main  {
+
 
     public static void main(String[] args) {
         TestThread1 t1 = new TestThread1();
-        TestThread1 t2 = new TestThread1();
+        TestThread2 t2 = new TestThread2();
 
         t1.start();
         try {
@@ -32,7 +38,7 @@ public class Main  {
 
         }
         t2.start();
-
+        t2.interrupt();
     }
 }
 
